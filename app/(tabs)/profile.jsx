@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import "../global.css";
-const profile = () => {
+import "../../global.css";
+const Profile = () => {
   return (
     <View className="bg-yellow-400">
       <Text>profile</Text>
@@ -9,6 +9,6 @@ const profile = () => {
   );
 };
 
-export default profile;
+export default Profile;
 
 const styles = StyleSheet.create({});
