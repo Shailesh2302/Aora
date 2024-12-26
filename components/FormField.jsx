@@ -23,7 +23,7 @@ const FormField = ({
         } rounded-3xl  items-center`}
       >
         <TextInput
-          className="flex-1 w-full text-white font-psemibold text-base"
+          className="flex-1 w-full h-full text-white font-psemibold text-base"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7b7b8b"

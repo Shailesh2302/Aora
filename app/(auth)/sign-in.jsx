@@ -4,20 +4,44 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-
+import { Link } from "expo-router";
+import { getCurrentUser, signIn } from "../../lib/appwrite";
+import { Alert } from "react-native";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { router } from "expo-router";
 const SignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {};
+  const { setUser, setIsLogged } = useGlobalContext();
 
+  const submit = async () => {
+    if (form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all the fields");
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await signIn(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLogged(true);
+      Alert.alert("Success", "User signed in successfully");
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
-        <View className="w-full justify-center h-full px-4 my-6">
+        <View className="w-full justify-center min-h-[85vh] px-4 my-6">
           <Image
             source={images.logo}
             resizeMode="contain"
@@ -43,7 +67,16 @@ const SignIn = () => {
             title={"Sign In"}
             handlePress={submit}
             containerStyle="mt-7"
+            isLoading={isSubmitting}
           />
+          <View className="justify-center pt-5 flex-row gap-2">
+            <Text className="text-lg mt-2 text-gray-100 font-pregular">
+              Don't have account?
+            </Text>
+            <Link href={"/sign-up"} className="mt-2 font-psemibold text-lg">
+              Sign up
+            </Link>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
